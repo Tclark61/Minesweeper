@@ -10,6 +10,7 @@ square = pyautogui.locateOnScreen('square.png')
 print (square)
 
 small = cv2.resize(image, (0,0), fx=0.5, fy=0.5)
-newSquare = pyautogui.locateOnScreen(small)
+cv2.imwrite('resizeSquare.png', small)
+newSquare = pyautogui.locateOnScreen('resizeSquare.png')
 
 print (newSquare)

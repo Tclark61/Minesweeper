@@ -11,22 +11,17 @@ scalex = 0.1
 scaley = 0.1
 small = cv2.resize(image, None, fx=scalex, fy=scaley, interpolation = cv2.INTER_LANCZOS4)
 cv2.imwrite('resizetemplate.png', small)
-newtemplate = pyautogui.locateOnScreen('resizetemplate.png')
-if(print(newtemplate) == "None"):
-    print("No minesweeper template found")
-    exit()
-print (newtemplate)
 
-
-
-while print(newtemplate) == None:
+while(True):
+    print("Scale: " + str(scalex))
     small = cv2.resize(image, (0,0), fx=scalex, fy=scaley, interpolation = cv2.INTER_LANCZOS4)
     cv2.imwrite('resizetemplate.png', small)
     newtemplate = pyautogui.locateOnScreen('resizetemplate.png', confidence = .85)
+    print(newtemplate)
+    if newtemplate != None:
+        break
     scalex = scalex + 0.1
     scaley = scaley + 0.1
-
-scalex = scalex - 0.1
-scaley = scaley - 0.1
-print("Scale: " + str(scalex))
+    
+print("Final Scale: " + str(scalex))
     

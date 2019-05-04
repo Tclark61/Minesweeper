@@ -3,6 +3,7 @@ import pyautogui
 pyautogui.FAILSAFE= True
 import cv2
 import math
+import random
 
 CONFIDENCE = 0.85
 
@@ -37,17 +38,24 @@ def determineScale(imageLoc, color):
     
     return scale
 
-def playGame(board, scale, ):
+def playGame(board, scale, numboxes):
     lowestProb = 100
     lowestProbIndex = -1
     while(findCoordinates('oFace.png', scale, 1) != None or findCoordinates('happyFace.png', scale, 1) != None):
-        for i in board:
-            if board[i].probability < lowestProb:
+        for i in range(0, numboxes):
+            if board[i].probability < lowestProb and board[i].isClicked == False:
                 lowestProb = board[i].probability
                 lowestProbIndex = i
-        pyautogui.click(pyautogui.center(board[lowestProbIndex], button = 'left')
-    if(findCoordinates('XFace.png', scale, 1) != None:
+        pyautogui.click(pyautogui.center(board[lowestProbIndex].tuple), button='left')
+        lowestProb = 100
+        board[lowestProbIndex].isClicked = True
+        print("Clicked the " + str(lowestProbIndex) + " box, it had probability " + str(board[lowestProbIndex].probability))
+        
+    if findCoordinates('XFace.png', scale, 1) != None:
         print("Game Over :(")
+        exit()
+    else:
+        print("You won! Congratulations!")
     
 def main():
     scale = determineScale('template.png', 0)
@@ -77,18 +85,21 @@ def main():
     xCoord = box[0]
     yCoord = box[1]
     board = []
+    print("Please enter the number of bombs: ")
     bombs = input()
     for i in range(0,numboxes):
         xCoord = box[0] + (box[2]*(i%numboxeswide))
         yCoord = box[1] + (box[3]*math.trunc(i/numboxeswide))
         board.append(Node(xCoord, yCoord,box[2],box[3]))
-        board[i].probability = bombs/numboxes
-        pyautogui.click(pyautogui.center(board[i].tuple), button='left')
-        if(findCoordinates('oFace.png', scale, 1) == None and findCoordinates('happyFace.png', scale, 1) == None):
-            print("We couldn't find O Face")
-            break
+        #board[i].probability = bombs/numboxes
+        board[i].probability = random.random()
+        board[i].isClicked = False
+        # pyautogui.click(pyautogui.center(board[i].tuple), button='left')
+        # if(findCoordinates('oFace.png', scale, 1) == None and findCoordinates('happyFace.png', scale, 1) == None):
+            # print("We couldn't find O Face")
+            # break
 
-
+    playGame(board, scale, numboxes)
 
 if __name__ == '__main__':
     main()

@@ -10,6 +10,7 @@ Current thoughts
     Need to test to see which has the highest confidence scaling
     Testing to make sure we get the correct number of boxes
     Need to make functions cleaner
+    Need to make a way to read how many bombs there are; right now we are manually inputting it
 
 
 

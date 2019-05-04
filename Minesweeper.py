@@ -26,6 +26,7 @@ def determineScale(imageLoc, color):
     scale = 5
     image = cv2.imread(imageLoc, 0)
     while(True):
+        #If color is 0, search in greyscale. If 1, search in color
         newtemplate = findCoordinates(imageLoc, scale, color)
         if newtemplate != None:
             break
@@ -34,9 +35,19 @@ def determineScale(imageLoc, color):
             print("No minesweeper template found")
             exit()
     
-    print("Final Scale: " + str(scale))
     return scale
 
+def playGame(board, scale, ):
+    lowestProb = 100
+    lowestProbIndex = -1
+    while(findCoordinates('oFace.png', scale, 1) != None or findCoordinates('happyFace.png', scale, 1) != None):
+        for i in board:
+            if board[i].probability < lowestProb:
+                lowestProb = board[i].probability
+                lowestProbIndex = i
+        pyautogui.click(pyautogui.center(board[lowestProbIndex], button = 'left')
+    if(findCoordinates('XFace.png', scale, 1) != None:
+        print("Game Over :(")
     
 def main():
     scale = determineScale('template.png', 0)
@@ -66,11 +77,12 @@ def main():
     xCoord = box[0]
     yCoord = box[1]
     board = []
+    bombs = input()
     for i in range(0,numboxes):
         xCoord = box[0] + (box[2]*(i%numboxeswide))
         yCoord = box[1] + (box[3]*math.trunc(i/numboxeswide))
         board.append(Node(xCoord, yCoord,box[2],box[3]))
-        board[i].probability = 0
+        board[i].probability = bombs/numboxes
         pyautogui.click(pyautogui.center(board[i].tuple), button='left')
         if(findCoordinates('oFace.png', scale, 1) == None and findCoordinates('happyFace.png', scale, 1) == None):
             print("We couldn't find O Face")

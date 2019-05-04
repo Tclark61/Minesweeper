@@ -44,11 +44,11 @@ def main():
     print(cornergui)
     #Find thickness of border & bottomrightmost coordinate
     box = findCoordinates('template.png', scale)
-    borderthickness = cornergui[2] - box[2]
     botrightcoord = (cornergui[0] + box[2], cornergui[1] + box[3])
 
 
     #Calculate the dimensions of the board without the border
+    #Image tuples are (left, top, width, height)
     topleftcoord = (box[0], box[1])
     botleftcoord = (box[0], botrightcoord[1])
     toprightcoord = (botrightcoord[0], box[1])
@@ -57,5 +57,17 @@ def main():
     print(botleftcoord)
     print(botrightcoord)
 
+    totalWidth = botrightcoord[0] - botleftcoord[0]
+    totalHeight = botrightcoord[1] - toprightcoord[1]
+    numboxeswide = round((totalWidth-box[2])/box[2] + 1)
+    numboxestall = round((totalHeight-box[3])/box[3] + 1)
+    numboxes = numboxeswide*numboxestall
+    print(numboxes)
+
 if __name__ == '__main__':
     main()
+
+
+
+# Quick maffs: boxwidth * x = (total width - boxwidth)
+#              x = (totalwidth-boxwidth) / boxwidth

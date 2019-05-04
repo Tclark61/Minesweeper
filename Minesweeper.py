@@ -53,8 +53,8 @@ def main():
     box = findCoordinates('template.png', scale)
     botrightcoord = (cornergui[0] + box[2], cornergui[1] + box[3])
 
-    faceScale = determineScale('HappyFace.png')
-    happyFace = findCoordinates('HappyFace.png', faceScale)
+    faceScale = determineScale('happyFace.png')
+    happyFace = findCoordinates('happyFace.png', faceScale)
     print("Happy face coords: " + str(happyFace))
     
     #Calculate the dimensions of the board without the border
@@ -79,7 +79,7 @@ def main():
         board.append(Node(xCoord, yCoord,box[2],box[3]))
         board[i].probability = 0
         pyautogui.click(pyautogui.center(board[i].tuple), button='left')
-        if(findCoordinates('OFace.png', scale) == None and findCoordinates('HappyFace.png', scale) == None):
+        if(findCoordinates('oFace.png', scale) == None and findCoordinates('happyFace.png', scale) == None):
             print("We couldn't find O Face")
             break
 

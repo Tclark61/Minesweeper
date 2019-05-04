@@ -13,20 +13,20 @@ class Node:
         self.tuple = (x,y,width,height)
 
 
-def findCoordinates(imageLoc, scale):
+def findCoordinates(imageLoc, scale, color):
     if scale == None:
         scale = 1
-    image = cv2.imread(imageLoc, 0)
+    image = cv2.imread(imageLoc, color)
     scaledImage = cv2.resize(image, None, fx = scale, fy = scale, interpolation = cv2.INTER_LANCZOS4)
     cv2.imwrite('scaledImage.png', scaledImage)
     return pyautogui.locateOnScreen('scaledImage.png', confidence = CONFIDENCE)
 
-def determineScale(imageLoc):
+def determineScale(imageLoc, color):
     
     scale = 5
     image = cv2.imread(imageLoc, 0)
     while(True):
-        newtemplate = findCoordinates(imageLoc, scale)
+        newtemplate = findCoordinates(imageLoc, scale, color)
         if newtemplate != None:
             break
         scale = scale - 0.05
@@ -39,23 +39,21 @@ def determineScale(imageLoc):
 
     
 def main():
-    scale = determineScale('template.png')
+    scale = determineScale('template.png', 0)
     #Loading Corner and resizing it to the correct size
-    cornergui = findCoordinates('corner.png', scale)
+    cornergui = findCoordinates('corner.png', scale, 0)
     if(cornergui == None):
-        cornerscale = determineScale('corner.png')
-        cornergui = findCoordinates('corner.png', cornerscale)
+        cornerscale = determineScale('corner.png', 0)
+        cornergui = findCoordinates('corner.png', cornerscale, 0)
         if(cornergui == None):
             print("Corner could not be found. What did you do wrong this time?")
             exit()
     print(cornergui)
     #Find thickness of border & bottomrightmost coordinate
-    box = findCoordinates('template.png', scale)
+    box = findCoordinates('template.png', scale, 0)
     botrightcoord = (cornergui[0] + box[2], cornergui[1] + box[3])
 
-    faceScale = determineScale('happyFace.png')
-    happyFace = findCoordinates('happyFace.png', faceScale)
-    print("Happy face coords: " + str(happyFace))
+    faceScale = determineScale('happyFace.png', 1)
     
     #Calculate the dimensions of the board without the border
     #Image tuples are (left, top, width, height)
@@ -79,7 +77,7 @@ def main():
         board.append(Node(xCoord, yCoord,box[2],box[3]))
         board[i].probability = 0
         pyautogui.click(pyautogui.center(board[i].tuple), button='left')
-        if(findCoordinates('oFace.png', scale) == None and findCoordinates('happyFace.png', scale) == None):
+        if(findCoordinates('oFace.png', scale, 1) == None and findCoordinates('happyFace.png', scale, 1) == None):
             print("We couldn't find O Face")
             break
 

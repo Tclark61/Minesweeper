@@ -1,5 +1,6 @@
 import numpy as np
 import pyautogui
+pyautogui.FAILSAFE= True
 import cv2
 import math
 
@@ -69,13 +70,15 @@ def main():
     xCoord = box[0]
     yCoord = box[1]
     board = []
+
     for i in range(0,numboxes):
-        xCoord = box[0] + (box[2]*i%numboxeswide)
+        xCoord = box[0] + (box[2]*(i%numboxeswide))
         yCoord = box[1] + (box[3]*math.trunc(i/numboxestall))
         board.append(Node(xCoord, yCoord,box[2],box[3]))
         board[i].probability = 0
+        pyautogui.click(pyautogui.center(board[i].tuple), button='right')
 
-    pyautogui.click(pyautogui.center(board[0].tuple), button='right')
+
 
 if __name__ == '__main__':
     main()

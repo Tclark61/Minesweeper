@@ -7,8 +7,8 @@ screen = pyautogui.screenshot()
 screen = cv2.cvtColor(np.array(screen), cv2.COLOR_RGB2BGR)
 template = pyautogui.locateOnScreen('template.png')
 
-scalex = 0.2
-scaley = 0.2
+scalex = 0.5
+scaley = 0.5
 small = cv2.resize(image, None, fx=scalex, fy=scaley, interpolation = cv2.INTER_LANCZOS4)
 cv2.imwrite('resizetemplate.png', small)
 

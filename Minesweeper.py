@@ -18,12 +18,10 @@ def determineScale(imageLoc):
     
     scale = 5
     image = cv2.imread(imageLoc, 0)
-    scaledImage = cv2.resize(image, None, fx=scale, fy=scale, interpolation = cv2.INTER_LANCZOS4)
-    cv2.imwrite('resizetemplate.png', scaledImage)
+    # scaledImage = cv2.resize(image, None, fx=scale, fy=scale, interpolation = cv2.INTER_LANCZOS4)
+    # cv2.imwrite('resizetemplate.png', scaledImage)
     while(True):
-        scaledImage = cv2.resize(image, (0,0), fx=scale, fy=scale, interpolation = cv2.INTER_LANCZOS4)
-        cv2.imwrite('resizetemplate.png', scaledImage)
-        newtemplate = pyautogui.locateOnScreen('resizetemplate.png', confidence = CONFIDENCE)
+        newtemplate = findCoordinates(imageLoc, scale)
         if newtemplate != None:
             break
         scale = scale - 0.05

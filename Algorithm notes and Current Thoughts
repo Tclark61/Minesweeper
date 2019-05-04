@@ -1,0 +1,39 @@
+Algorithm notes
+    Value the center first. In case of a tie, the closer to the center the better.
+    If the number shown is the same as the number of unknown boxes around it, each of those unknown boxes have 100%
+    So first, the algorithm will mark any bombs that have 100% chance of being chosen.
+    If a number n has n bombs already found around it, then all other boxes around it are clear.
+    If known bomb, right click. If known safe, left click.
+    If there is a flag, NEVER, EVER CLICK IT.
+
+Current thoughts
+    Need to test to see which has the highest confidence scaling
+    Testing to make sure we get the correct number of boxes
+    Need to make functions cleaner
+
+
+
+
+b b 1
+b 3 1
+x 1 0
+x 2 1
+b b x
+
+b b 1
+b 3 1
+x 1 0
+x 2 1
+b x b
+
+b b 1
+x 3 1
+b 1 0
+x 2 1
+x b x
+
+b b 1
+x 3 1
+b 1 0
+x 2 1
+x x b

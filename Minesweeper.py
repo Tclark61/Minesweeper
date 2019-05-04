@@ -19,8 +19,6 @@ def findCoordinates(imageLoc, scale):
     image = cv2.imread(imageLoc, 0)
     scaledImage = cv2.resize(image, None, fx = scale, fy = scale, interpolation = cv2.INTER_LANCZOS4)
     cv2.imwrite('scaledImage.png', scaledImage)
-    screen = pyautogui.screenshot()
-    screen = cv2.cvtColor(np.array(screen), cv2.COLOR_RGB2BGR)
     return pyautogui.locateOnScreen('scaledImage.png', confidence = CONFIDENCE)
 
 def determineScale(imageLoc):
@@ -55,7 +53,10 @@ def main():
     box = findCoordinates('template.png', scale)
     botrightcoord = (cornergui[0] + box[2], cornergui[1] + box[3])
 
-
+    faceScale = determineScale('HappyFace.png')
+    happyFace = findCoordinates('HappyFace.png', faceScale)
+    print("Happy face coords: " + str(happyFace))
+    
     #Calculate the dimensions of the board without the border
     #Image tuples are (left, top, width, height)
     topleftcoord = (box[0], box[1])
@@ -77,7 +78,10 @@ def main():
         yCoord = box[1] + (box[3]*math.trunc(i/numboxeswide))
         board.append(Node(xCoord, yCoord,box[2],box[3]))
         board[i].probability = 0
-        pyautogui.click(pyautogui.center(board[i].tuple), button='right')
+        pyautogui.click(pyautogui.center(board[i].tuple), button='left')
+        if(findCoordinates('OFace.png', scale) == None and findCoordinates('HappyFace.png', scale) == None):
+            print("We couldn't find O Face")
+            break
 
 
 

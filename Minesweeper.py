@@ -1,8 +1,17 @@
 import numpy as np
 import pyautogui
 import cv2
+import math
 
 CONFIDENCE = 0.85
+
+#Every box in minesweeper is a Node
+class Node:
+   
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+
 
 def findCoordinates(imageLoc, scale):
     if scale == None:
@@ -59,10 +68,18 @@ def main():
 
     totalWidth = botrightcoord[0] - botleftcoord[0]
     totalHeight = botrightcoord[1] - toprightcoord[1]
-    numboxeswide = round((totalWidth-box[2])/box[2] + 1)
-    numboxestall = round((totalHeight-box[3])/box[3] + 1)
+    numboxeswide = int(round((totalWidth-box[2])/box[2] + 1))
+    numboxestall = int(round((totalHeight-box[3])/box[3] + 1))
     numboxes = numboxeswide*numboxestall
     print(numboxes)
+    xCoord = box[0]
+    yCoord = box[1]
+    board = [numboxes]
+    for i in range(0,numboxes):
+        xCoord = box[0] + (box[2]*i%numboxeswide)
+        yCoord = box[1] + (box[3]*math.trunc(i/numboxestall))
+        board[i] = Node(xCoord, yCoord)
+        
 
 if __name__ == '__main__':
     main()

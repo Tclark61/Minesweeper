@@ -32,7 +32,6 @@ def determineScale(imageLoc):
 
     
 def main():
-    template = findCoordinates('template.png', None)
     scale = determineScale('template.png')
     #Loading Corner and resizing it to the correct size
     cornergui = findCoordinates('corner.png', scale)
@@ -43,20 +42,20 @@ def main():
             print("Corner could not be found. What did you do wrong this time?")
             exit()
     print(cornergui)
-
     #Find thickness of border & bottomrightmost coordinate
-    #borderthickness = cornergui[2] - newtemplate[2]
-    #botrightcoord = (cornergui[0] + newtemplate[2], cornergui[1] + newtemplate[3])
+    box = findCoordinates('template.png', scale)
+    borderthickness = cornergui[2] - box[2]
+    botrightcoord = (cornergui[0] + box[2], cornergui[1] + box[3])
 
 
     #Calculate the dimensions of the board without the border
-    #topleftcoord = (newtemplate[0], newtemplate[1])
-   # botleftcoord = (newtemplate[0], botrightcoord[1])
-    #toprightcoord = (botrightcoord[0], newtemplate[1])
-    #print(topleftcoord)
-    #print(toprightcoord)
-    #print(botleftcoord)
-    #print(botrightcoord)
+    topleftcoord = (box[0], box[1])
+    botleftcoord = (box[0], botrightcoord[1])
+    toprightcoord = (botrightcoord[0], box[1])
+    print(topleftcoord)
+    print(toprightcoord)
+    print(botleftcoord)
+    print(botrightcoord)
 
 if __name__ == '__main__':
     main()

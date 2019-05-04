@@ -48,12 +48,9 @@ def main():
         if(cornergui == None):
             print("Corner could not be found. What did you do wrong this time?")
             exit()
-    print(cornergui)
     #Find thickness of border & bottomrightmost coordinate
     box = findCoordinates('template.png', scale, 0)
     botrightcoord = (cornergui[0] + box[2], cornergui[1] + box[3])
-
-    faceScale = determineScale('happyFace.png', 1)
     
     #Calculate the dimensions of the board without the border
     #Image tuples are (left, top, width, height)
@@ -69,8 +66,6 @@ def main():
     xCoord = box[0]
     yCoord = box[1]
     board = []
-    print(numboxeswide)
-    print(numboxestall)
     for i in range(0,numboxes):
         xCoord = box[0] + (box[2]*(i%numboxeswide))
         yCoord = box[1] + (box[3]*math.trunc(i/numboxeswide))

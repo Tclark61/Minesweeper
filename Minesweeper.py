@@ -7,8 +7,9 @@ CONFIDENCE = 0.85
 
 #Every box in minesweeper is a Node
 class Node:
-    def __init__(self, x, y):
+    def __init__(self, x, y, width, height):
         self.coords = (x,y)
+        self.tuple = (x,y,width,height)
 
 
 def findCoordinates(imageLoc, scale):
@@ -71,11 +72,10 @@ def main():
     for i in range(0,numboxes):
         xCoord = box[0] + (box[2]*i%numboxeswide)
         yCoord = box[1] + (box[3]*math.trunc(i/numboxestall))
-        board.append(Node(xCoord, yCoord))
-        board[i].width = box[2]
-        board[i].height = box[3]
+        board.append(Node(xCoord, yCoord,box[2],box[3]))
         board[i].probability = 0
-    print(str(board[0].height))    
+
+    pyautogui.click(pyautogui.center(board[0].tuple), button='right')
 
 if __name__ == '__main__':
     main()

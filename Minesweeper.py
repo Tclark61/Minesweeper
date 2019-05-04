@@ -72,6 +72,10 @@ def main():
         xCoord = box[0] + (box[2]*i%numboxeswide)
         yCoord = box[1] + (box[3]*math.trunc(i/numboxestall))
         board.append(Node(xCoord, yCoord))
+        board[i].width = box[2]
+        board[i].height = box[3]
+        board[i].probability = 0
+    print(str(board[0].height))    
 
 if __name__ == '__main__':
     main()

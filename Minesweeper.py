@@ -18,8 +18,6 @@ def determineScale(imageLoc):
     
     scale = 5
     image = cv2.imread(imageLoc, 0)
-    # scaledImage = cv2.resize(image, None, fx=scale, fy=scale, interpolation = cv2.INTER_LANCZOS4)
-    # cv2.imwrite('resizetemplate.png', scaledImage)
     while(True):
         newtemplate = findCoordinates(imageLoc, scale)
         if newtemplate != None:
@@ -31,15 +29,19 @@ def determineScale(imageLoc):
     
     print("Final Scale: " + str(scale))
     return scale
+
     
 def main():
     template = findCoordinates('template.png', None)
     scale = determineScale('template.png')
     #Loading Corner and resizing it to the correct size
     cornergui = findCoordinates('corner.png', scale)
-    print(cornergui)
-    cornerscale = determineScale('corner.png')
-    cornergui = findCoordinates('corner.png', cornerscale)
+    if(cornergui == None):
+        cornerscale = determineScale('corner.png')
+        cornergui = findCoordinates('corner.png', cornerscale)
+        if(cornergui == None):
+            print("Corner could not be found. What did you do wrong this time?")
+            exit()
     print(cornergui)
 
     #Find thickness of border & bottomrightmost coordinate

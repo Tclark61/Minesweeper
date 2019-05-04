@@ -16,7 +16,7 @@ def findCoordinates(imageLoc, scale):
 
 def determineScale(imageLoc):
     
-    scale = 0.5
+    scale = 5
     image = cv2.imread(imageLoc, 0)
     scaledImage = cv2.resize(image, None, fx=scale, fy=scale, interpolation = cv2.INTER_LANCZOS4)
     cv2.imwrite('resizetemplate.png', scaledImage)
@@ -26,8 +26,8 @@ def determineScale(imageLoc):
         newtemplate = pyautogui.locateOnScreen('resizetemplate.png', confidence = CONFIDENCE)
         if newtemplate != None:
             break
-        scale = scale + 0.05
-        if(scale > 5):
+        scale = scale - 0.05
+        if(scale < 0.5):
             print("No minesweeper template found")
             exit()
     

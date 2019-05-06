@@ -72,7 +72,7 @@ def playGame(board, scale, boardInfo):
     while(findCoordinates('oFace.png', scale, 1) != None or findCoordinates('happyFace.png', scale, 1) != None):
         for i in range(0, boardInfo[0]):
             if(board[i].probability == 1 and board[i].isClicked == False):
-                print("Found a bomb at " + str(i) + ", box is unclicked: " + str(board[i].isClicked))
+                print("box "+ str(i) + " being flagged has probability " + str(board[i].probability))
                 pyautogui.click(pyautogui.center(board[lowestProbIndex].tuple), button='right')
                 board[i].isClicked = True
             if board[i].probability < lowestProb and board[i].isClicked == False:
@@ -81,7 +81,7 @@ def playGame(board, scale, boardInfo):
         pyautogui.click(pyautogui.center(board[lowestProbIndex].tuple), button='left')
         lowestProb = 100
         board[lowestProbIndex].isClicked = True
-        changeNeighbors(board, i, boardInfo)
+        changeNeighbors(board, lowestProbIndex, boardInfo)
         print("Clicked the " + str(lowestProbIndex) + " box, it had probability " + str(board[lowestProbIndex].probability))
         
     if findCoordinates('XFace.png', scale, 1) != None:
@@ -127,6 +127,7 @@ def main():
         board.append(Node(xCoord, yCoord,box[2],box[3]))
         #board[i].probability = bombs/numboxes
         board[i].probability = random.random()
+        print(str(i) + ": " + str(board[i].probability))
         board[i].isClicked = False
         # pyautogui.click(pyautogui.center(board[i].tuple), button='left')
         # if(findCoordinates('oFace.png', scale, 1) == None and findCoordinates('happyFace.png', scale, 1) == None):

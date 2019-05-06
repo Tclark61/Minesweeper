@@ -22,22 +22,46 @@ def probabilityChange(probabilityDelta, box):
         
 def changeNeighbors(board, clickIndex, boardInfo):
     #Check to see how many neighbors the clicked node has
+    upNeighbor = False
+    downNeighbor = False
+    frontNeighbor = False
+    backNeighbor = False
+    
     
     #Set a constant probabilityDelta for now
-    probabilityDelta = 0.4
+    probabilityDelta = 0.2
     #Check for neighbor behind
     if(clickIndex > 0):
         if(board[clickIndex - 1].isClicked == False):
             probabilityChange(probabilityDelta, board[clickIndex - 1])
+            backNeighbor = True
     #Check for neighbor ahead
     if(clickIndex < (boardInfo[0] - 1)):
         if(board[clickIndex - 1].isClicked == False):
             probabilityChange(probabilityDelta, board[clickIndex + 1])
+            frontNeighbor = True
     #Check for neighbor above
     if(clickIndex >= boardInfo[1]):
         if(board[clickIndex - boardInfo[1]].isClicked == False):
             probabilityChange(probabilityDelta, board[clickIndex - boardInfo[1]])
-    
+            upNeighbor = True
+    #Check for the neighbor below
+    if(clickIndex < boardInfo[0] - boardInfo[1]):
+        probabilityChange(probabilityDelta, board[clickIndex + boardInfo[1]])
+        downNeighbor = True
+    #Check for neighbor in top left diag
+    if(upNeighbor and backNeighbor):
+        probabilityChange(probabilityDelta, board[(clickIndex - boardInfo[1]) - 1])
+    #Check for neighbor in top right diag
+    if(upNeighbor and frontNeighbor):
+        probabilityChange(probabilityDelta, board[(clickIndex - boardInfo[1]) + 1])
+    #Check for neighbor in bottom left diag
+    if(downNeighbor and backNeighbor):
+        probabilityChange(probabilityDelta, board[(clickIndex + boardInfo[1]) - 1])
+    #Check for neighbor in bottom right diag
+    if(downNeighbor and frontNeighbor):
+        probabilityChange(probabilityDelta, board[(clickIndex + boardInfo[1]) + 1])
+        
 
 
     
@@ -75,7 +99,7 @@ def playGame(board, scale, boardInfo):
                 print("box "+ str(i) + " being flagged has probability " + str(board[i].probability))
                 pyautogui.click(pyautogui.center(board[lowestProbIndex].tuple), button='right')
                 board[i].isClicked = True
-            if board[i].probability < lowestProb and board[i].isClicked == False:
+            if (board[i].probability < lowestProb and board[i].isClicked == False):
                 lowestProb = board[i].probability
                 lowestProbIndex = i
         pyautogui.click(pyautogui.center(board[lowestProbIndex].tuple), button='left')

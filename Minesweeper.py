@@ -4,6 +4,7 @@ pyautogui.FAILSAFE= True
 import cv2
 import math
 import random
+import time
 
 CONFIDENCE = 0.85
 
@@ -31,12 +32,12 @@ def changeNeighbors(board, clickIndex, boardInfo):
     #Set a constant probabilityDelta for now
     probabilityDelta = 0.2
     #Check for neighbor behind
-    if(clickIndex > 0):
+    if(clickIndex > 0 and (clickIndex % boardInfo[1]) != 0):
         if(board[clickIndex - 1].isClicked == False):
             probabilityChange(probabilityDelta, board[clickIndex - 1])
             backNeighbor = True
     #Check for neighbor ahead
-    if(clickIndex < (boardInfo[0] - 1)):
+    if(clickIndex < (boardInfo[0] - 1) and (clickIndex % boardInfo[1]) != boardInfo[1] - 1):
         if(board[clickIndex - 1].isClicked == False):
             probabilityChange(probabilityDelta, board[clickIndex + 1])
             frontNeighbor = True
@@ -73,9 +74,8 @@ def findCoordinates(imageLoc, scale, color):
     cv2.imwrite('scaledImage.png', scaledImage)
     return pyautogui.locateOnScreen('scaledImage.png', confidence = CONFIDENCE)
 
-def determineScale(imageLoc, color):
-    #Experimenting with being less safe, changed delta from 0.05 to 0.1 to half max computation time
-    delta = 0.1
+def determineScale(imageLoc, color, delta):
+    #Experimenting with being less safe, changed delta from 0.05 to 0.25 to half max computation time
     scale = 5
     image = cv2.imread(imageLoc, 0)
     while(True):
@@ -85,8 +85,13 @@ def determineScale(imageLoc, color):
             break
         scale = scale - delta
         if(scale < 0.5):
-            print("No minesweeper template found")
-            exit()
+            if(delta > 0.05):
+                print("No minesweeper template found, checking more precisely")
+                return determineScale(imageLoc, color, delta/2)
+            
+            else:
+                print("Even at the lowest delta, we could not find the image. Please check to see if the image is on the screen.")
+                exit()
     
     return scale
 
@@ -98,6 +103,7 @@ def playGame(board, scale, boardInfo):
             if(board[i].probability == 1 and board[i].isClicked == False):
                 print("box "+ str(i) + " being flagged has probability " + str(board[i].probability))
                 pyautogui.click(pyautogui.center(board[lowestProbIndex].tuple), button='right')
+                time.sleep(0.25)
                 board[i].isClicked = True
             if (board[i].probability < lowestProb and board[i].isClicked == False):
                 lowestProb = board[i].probability
@@ -111,15 +117,16 @@ def playGame(board, scale, boardInfo):
     if findCoordinates('XFace.png', scale, 1) != None:
         print("Game Over :(")
         exit()
-    else:
+    elif findCoordinates('CoolGuy.png', scale, 1) != None:
         print("You won! Congratulations!")
-    
+    else:
+        print("Game Over!")
 def main():
-    scale = determineScale('template.png', 0)
+    scale = determineScale('template.png', 0, 0.1)
     #Loading Corner and resizing it to the correct size
     cornergui = findCoordinates('corner.png', scale, 0)
     if(cornergui == None):
-        cornerscale = determineScale('corner.png', 0)
+        cornerscale = determineScale('corner.png', 0, 0.1)
         cornergui = findCoordinates('corner.png', cornerscale, 0)
         if(cornergui == None):
             print("Corner could not be found. What did you do wrong this time?")
